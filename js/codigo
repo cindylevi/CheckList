@@ -1,0 +1,90 @@
+var todoLista = [];
+var inputDescripcion = document.getElementById('inputDescri');
+var ListaHTML = document.getElementById('todoLISTA');
+
+
+
+function AgregarItem(){
+var fecha = new Date();
+var Dia = fecha.getDate()+"-"+(fecha.getMonth()+1)+"-"+fecha.getFullYear();
+var Hora = fecha.getHours()+":"+fecha.getMinutes();
+var fechaCompleta = Dia + " ~ " + Hora;
+    var Tarea = {
+        descripcion: inputDescripcion.value,
+        checkeado: false,
+        hoy: fechaCompleta,
+        fechaFinal: "",
+    };
+    todoLista.push(Tarea);
+    MostrarLista();
+}
+
+function MostrarLista(){
+    borrarLista();
+    ListaHTML.className="list-group";
+
+    todoLista.forEach(agregarElemento);
+
+}
+
+function  finalizarItem(){
+    
+}
+
+function agregarElemento (item){
+    //Creo HTML
+
+    var li = document.createElement('li');
+    li.className="list-group-item";
+    var div = document.createElement('div');
+    div.className = "custom-control custom-checkbox";
+    li.appendChild(div);
+    var input = document.createElement('input');
+    input.type= "checkbox";
+    var nombreID = item.descripcion;
+    input.id = nombreID;
+    input.className="custom-control-input";
+    input.onclick=function(){tocoCheckbox(item)};
+    div.appendChild(input);
+    var label = document.createElement('label');
+    label.className="custom-control-label";
+    label.htmlFor = nombreID;
+    label.innerHTML = item.descripcion;
+    if(item.checkeado){
+        input.setAttribute("checked", true);
+        label.style.textDecoration = "line-through";
+    }
+    var fecha = document.createElement('p');
+    fecha.innerHTML=item.hoy;
+    if(item.fechaFinal != ""){
+        fecha.innerHTML=item.hoy + " | " + item.fechaFinal;
+    }
+    fecha.style.float = "right";
+    fecha.style.marginBottom = "0";
+    fecha.style.color = "grey";
+    div.appendChild(fecha);
+    div.appendChild(label);
+    ListaHTML.appendChild(li);
+    //Me fijo si esta checked
+
+}
+
+function borrarLista(){
+    ListaHTML.innerHTML= '';
+}
+
+function tocoCheckbox(item){
+    var fecha = new Date();
+    var Dia = fecha.getDate()+"-"+(fecha.getMonth()+1)+"-"+fecha.getFullYear();
+    var Hora = fecha.getHours()+":"+fecha.getMinutes();
+    var fechaCompleta = Dia + " ~ " + Hora;
+    if(item.checkeado == false){
+        item.checkeado = true;
+        item.fechaFinal = fechaCompleta;
+    }
+    else{
+        item.checkeado = false;
+        item.fechaFinal = "";
+    }
+    MostrarLista();
+}
